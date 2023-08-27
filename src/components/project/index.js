@@ -1,7 +1,7 @@
-
 export default function (title) {
   const todos = [];
   const getTitle = () => title;
+  const getTodos = () => todos;
   const addTodo = (todo) => {
     todos.push(todo);
   }
@@ -13,5 +13,5 @@ export default function (title) {
     })
   }
 
-  return { getTitle, addTodo, printTodos };
+  return { getTitle, getTodos, addTodo, printTodos };
 }
