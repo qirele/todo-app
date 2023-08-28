@@ -2,31 +2,36 @@ import './style.css';
 import createTodo from './components/todoItem';
 import createProject from './components/project';
 import createProjectsView from './components/projects';
+import createUI from './components/ui';
 
 let currentProject;
 let projectCounter = 0;
 const projects = [];
 const proj1 = createProject("default", projectCounter);
 currentProject = proj1;
-projects.push(proj1);
+projects.push(currentProject);
 projectCounter++;
 
-// Add interface for adding todos
 const body = document.querySelector("body");
-const div = document.createElement("div");
-const titleInput = document.createElement("input");
-const addTodoBtn = document.createElement("button");
-addTodoBtn.textContent = "Add Todo Item";
-div.appendChild(titleInput);
-div.appendChild(addTodoBtn);
+const {div, input, addTodoBtn, addProjectBtn} = createUI();
 body.appendChild(div);
 
 addTodoBtn.addEventListener("click", handleAddTodo)
 function handleAddTodo() {
-  const item1 = createTodo(titleInput.value, "description");
+  const item1 = createTodo(input.value, "description");
   currentProject.addTodo(item1);
   createProjectsView(projects);
 }
+
+addProjectBtn.addEventListener("click", handleAddProject)
+function handleAddProject() {
+  const proj = createProject(input.value, projectCounter);
+  currentProject = proj;
+  projects.push(currentProject);
+  projectCounter++;
+  createProjectsView(projects);
+}
+
 
 createProjectsView(projects);
 

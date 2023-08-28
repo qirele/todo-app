@@ -1,15 +1,18 @@
 const body = document.querySelector("body");
 
 function createDivProject(projects, main) {
-  projects.forEach(project => {
+  projects.forEach((project, projectIdx) => {
     const div = document.createElement("div");
     const h1 = document.createElement("h1");
     h1.textContent = project.getTitle();
+    h1.dataset.projectIdx = projectIdx;
     div.appendChild(h1);
 
-    project.getTodos().forEach(todo => {
+    project.getTodos().forEach((todo, idx) => {
       const p = document.createElement("p");
       p.textContent = todo.getTitle();
+      p.dataset.idx = idx;
+      p.dataset.projectIdx = projectIdx;
       div.appendChild(p);
     });
     main.appendChild(div);
