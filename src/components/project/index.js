@@ -1,4 +1,5 @@
-export default function (title) {
+export default function (title, id) {
+  const getID = () => id;
   const todos = [];
   const getTitle = () => title;
   const getTodos = () => todos;
@@ -13,5 +14,5 @@ export default function (title) {
     })
   }
 
-  return { getTitle, getTodos, addTodo, printTodos };
+  return { getTitle, getTodos, addTodo, printTodos, getID};
 }

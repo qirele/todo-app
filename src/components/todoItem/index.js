@@ -1,4 +1,6 @@
-export default function (title, description /*, dueDate, importance, isCompleted */) {
+export default function (title, description /*, dueDate, importance, isCompleted */, projectID, taskID) {
+  const getID = () => taskID;
+  const getProjectID = () => projectID;
   const getTitle = () => title;
   const setTitle = (newTitle) => title = newTitle;
   const getDescription = () => description;
@@ -8,5 +10,5 @@ export default function (title, description /*, dueDate, importance, isCompleted
   // const getImportance = () => importance;
   // const getIsCompleted = () => isCompleted;
 
-  return { setTitle, getTitle, setDescription, getDescription }
+  return { setTitle, getTitle, setDescription, getDescription, getID, getProjectID}
 }
