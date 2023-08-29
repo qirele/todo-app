@@ -1,5 +1,4 @@
 export default function (title, description) { /*, dueDate, importance, isCompleted */
-  const getProjectID = () => projectID;
   const getTitle = () => title;
   const setTitle = (newTitle) => title = newTitle;
   const getDescription = () => description;
