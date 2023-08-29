@@ -59,7 +59,7 @@ function handleDivClick(e) {
 
   if (projectIdx) {
     changeCurrentProject(projectIdx);
-    changeCurrentProjectColor(projectIdx);
+    changeCurrentProjectColor();
   }
 
 
@@ -87,15 +87,16 @@ function handleDivClick(e) {
 
 function changeCurrentProject(idx) {
   currentProject = projects[idx];
+  currentProjectIdx = idx;
 }
 
-function changeCurrentProjectColor(idx) {
+function changeCurrentProjectColor() {
   const divs = document.querySelectorAll("main > div");
   divs.forEach(div => {
     div.classList.remove("currentProject");
   });
 
-  const theCurrentProjectDiv = document.querySelector(`main > div[data-project-idx="${idx ? idx : currentProjectIdx}"]`);
+  const theCurrentProjectDiv = document.querySelector(`main > div[data-project-idx="${currentProjectIdx}"]`);
   theCurrentProjectDiv.classList.add("currentProject");
 
 }
