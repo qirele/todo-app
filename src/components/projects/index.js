@@ -1,8 +1,12 @@
+import './style.css';
+
 export default function createProjects(projects) {
   const main = document.createElement("main");
+  main.classList.add("grid");
 
   projects.forEach((project, projectIdx) => {
     const div = document.createElement("div");
+    div.dataset.projectIdx = projectIdx;
     const h1 = document.createElement("h1");
     h1.textContent = project.getTitle();
     h1.dataset.projectIdx = projectIdx;
