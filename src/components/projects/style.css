@@ -2,3 +2,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(0, 300px));
 }
+
+.todo-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

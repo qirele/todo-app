@@ -13,11 +13,18 @@ export default function createProjects(projects) {
     div.appendChild(h1);
 
     project.getTodos().forEach((todo, todoIdx) => {
+      const todoDiv = document.createElement("div");
+      todoDiv.classList.add("todo-card");
       const p = document.createElement("p");
+      const detailsBtn = document.createElement("button");
+      detailsBtn.textContent = "See details";
+      detailsBtn.classList.add("details-btn");
+      todoDiv.dataset.idx = todoIdx;
+      todoDiv.dataset.projectIdx = projectIdx;
       p.textContent = todo.getTitle();
-      p.dataset.idx = todoIdx;
-      p.dataset.projectIdx = projectIdx;
-      div.appendChild(p);
+      todoDiv.appendChild(p);
+      todoDiv.appendChild(detailsBtn);
+      div.appendChild(todoDiv);
     });
 
     main.appendChild(div);

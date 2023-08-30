@@ -47,11 +47,16 @@ function replaceMain() {
 }
 
 function attachListenersForTodos() {
-  const divs = document.querySelectorAll("main > div"); // TODO(Kiril) : make this selector more specific
-  divs.forEach(div => div.addEventListener("click", handleTodoProjectClick));
+  const headings = document.querySelectorAll("main > div > h1"); // TODO(Kiril) : make this selector more specific
+  headings.forEach(h => h.addEventListener("click", handleSelectClick));
+
+  function handleSelectClick(e) {
+    changeCurrentProject(e.target.dataset.projectIdx);
+    changeCurrentProjectColor();
+  }
 }
 
-function handleTodoProjectClick(e) {
+function handleSeeDetails(e) {
   const todoPara = e.target;
   let todoIdx = e.target.dataset.idx;
   let projectIdx = e.target.dataset.projectIdx;
@@ -79,6 +84,8 @@ function handleTodoProjectClick(e) {
     input.focus();
   } else if (projectIdx) { // clicked on a h1, ie. project title
     // TODO(Kiril): add an input and a button to change project title
+  } else {
+
   }
 
   function handleChangeClick(e, input) {
