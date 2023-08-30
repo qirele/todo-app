@@ -65,13 +65,18 @@ function handleTodoProjectClick(e) {
 
   if (todoIdx) { // clicked on a todo item
     const input = document.createElement("input");
-    const btn = document.createElement("button");
+    const btnChange = document.createElement("button");
+    const btnDelete = document.createElement("button");
     input.value = todoPara.textContent;
     todoPara.textContent = "";
-    btn.textContent = "Change";
-    btn.addEventListener("click", (e) => handleChangeClick(e, input));
+    btnChange.textContent = "Change";
+    btnDelete.textContent = "Delete";
+    btnChange.addEventListener("click", (e) => handleChangeClick(e, input));
+    btnDelete.addEventListener("click", handleDeleteClick);
     todoPara.appendChild(input);
-    todoPara.appendChild(btn);
+    todoPara.appendChild(btnChange);
+    todoPara.appendChild(btnDelete);
+    input.focus();
   } else if (projectIdx) { // clicked on a h1, ie. project title
     // TODO(Kiril): add an input and a button to change project title
   }
@@ -81,6 +86,13 @@ function handleTodoProjectClick(e) {
     const theTodoItem = projects[projectIdx].getTodos()[todoIdx];
     theTodoItem.setTitle(input.value === "" ? theTodoItem.getTitle() : input.value);
     todoPara.textContent = theTodoItem.getTitle();
+  }
+
+  function handleDeleteClick(e) {
+    e.stopPropagation(); 
+    const proj = projects[projectIdx];
+    proj.deleteTodo(todoIdx);
+    replaceMain();
   }
 
 }
