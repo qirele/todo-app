@@ -6,9 +6,9 @@ import createUI from './components/ui';
 
 const projects = [];
 const proj1 = createProject("Today");
+projects.push(proj1);
 let currentProject = proj1;
 let currentProjectIdx = 0;
-projects.push(currentProject);
 
 const body = document.querySelector("body");
 const { div, input, addTodoBtn, addProjectBtn } = createUI();
@@ -32,9 +32,8 @@ function handleAddTodo() {
 function handleAddProject() {
   if (input.value === "") return;
   const proj = createProject(input.value);
-  currentProject = proj;
-  projects.push(currentProject);
-  currentProjectIdx = projects.length - 1;
+  projects.push(proj);
+  changeCurrentProject(projects.length - 1);
   replaceMain();
 }
 
@@ -49,10 +48,10 @@ function replaceMain() {
 
 function attachListenersForTodos() {
   const divs = document.querySelectorAll("main > div"); // TODO(Kiril) : make this selector more specific
-  divs.forEach(div => div.addEventListener("click", handleDivClick));
+  divs.forEach(div => div.addEventListener("click", handleTodoProjectClick));
 }
 
-function handleDivClick(e) {
+function handleTodoProjectClick(e) {
   const todoPara = e.target;
   let todoIdx = e.target.dataset.idx;
   let projectIdx = e.target.dataset.projectIdx;
@@ -65,9 +64,10 @@ function handleDivClick(e) {
 
 
   if (todoIdx) { // clicked on a todo item
-    todoPara.textContent = "";
     const input = document.createElement("input");
     const btn = document.createElement("button");
+    input.value = todoPara.textContent;
+    todoPara.textContent = "";
     btn.textContent = "Change";
     btn.addEventListener("click", (e) => handleChangeClick(e, input));
     todoPara.appendChild(input);
