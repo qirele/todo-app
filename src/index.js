@@ -11,9 +11,9 @@ let currentProject = proj1;
 let currentProjectIdx = 0;
 
 const body = document.querySelector("body");
-const { div, input, addTodoBtn, addProjectBtn } = createUI();
+const { header, titleInput, dateInput, addTodoBtn, projectTitleInput, addProjectBtn } = createUI();
 const main = createProjectsMain(projects);
-body.appendChild(div);
+body.appendChild(header);
 body.appendChild(main);
 attachListenersForTodos();
 changeCurrentProjectColor();
@@ -23,15 +23,17 @@ addProjectBtn.addEventListener("click", handleAddProject)
 
 
 function handleAddTodo() {
-  if (input.value === "") return;
-  const item1 = createTodo(input.value, "description");
+  if (titleInput.value === "") return;
+  const dateNow = new Date();
+  const date = dateInput.value === "" ? `${dateNow.getFullYear()}-${dateNow.getMonth() + 1}-${dateNow.getDate()}` : dateInput.value;
+  const item1 = createTodo(titleInput.value, "description", date);
   currentProject.addTodo(item1);
   replaceMain();
 }
 
 function handleAddProject() {
-  if (input.value === "") return;
-  const proj = createProject(input.value);
+  if (projectTitleInput.value === "") return;
+  const proj = createProject(projectTitleInput.value);
   projects.push(proj);
   changeCurrentProject(projects.length - 1);
   replaceMain();
@@ -53,6 +55,20 @@ function attachListenersForTodos() {
   function handleSelectClick(e) {
     changeCurrentProject(e.target.dataset.projectIdx);
     changeCurrentProjectColor();
+  }
+
+  const todos = document.querySelectorAll(".grid .todo-card");
+  todos.forEach(todo => {
+    const projectIdx = todo.dataset.projectIdx;
+    const todoIdx = todo.dataset.idx;
+
+    const expandBtn = todo.querySelector("button");
+    expandBtn.addEventListener("click", handleExpandClick);
+
+  });
+
+  function handleExpandClick() {
+    console.log("expanding the todo")
   }
 }
 
@@ -96,7 +112,7 @@ function handleSeeDetails(e) {
   }
 
   function handleDeleteClick(e) {
-    e.stopPropagation(); 
+    e.stopPropagation();
     const proj = projects[projectIdx];
     proj.deleteTodo(todoIdx);
     replaceMain();

@@ -5,29 +5,48 @@ export default function createProjects(projects) {
   main.classList.add("grid");
 
   projects.forEach((project, projectIdx) => {
-    const div = document.createElement("div");
-    div.dataset.projectIdx = projectIdx;
+    const projectDiv = document.createElement("div");
+    projectDiv.dataset.projectIdx = projectIdx;
     const h1 = document.createElement("h1");
     h1.textContent = project.getTitle();
     h1.dataset.projectIdx = projectIdx;
-    div.appendChild(h1);
+    projectDiv.appendChild(h1);
 
     project.getTodos().forEach((todo, todoIdx) => {
       const todoDiv = document.createElement("div");
-      todoDiv.classList.add("todo-card");
-      const p = document.createElement("p");
+
+      const dateDiv = document.createElement("div");
+      const dateLabel = document.createElement("span");
+      const dueDate = document.createElement("span");
+
+      const titleDiv = document.createElement("div");
+      const titlePara = document.createElement("p");
       const detailsBtn = document.createElement("button");
-      detailsBtn.textContent = "See details";
-      detailsBtn.classList.add("details-btn");
+
+      todoDiv.classList.add("todo-card");
       todoDiv.dataset.idx = todoIdx;
       todoDiv.dataset.projectIdx = projectIdx;
-      p.textContent = todo.getTitle();
-      todoDiv.appendChild(p);
-      todoDiv.appendChild(detailsBtn);
-      div.appendChild(todoDiv);
+
+      dateLabel.textContent = "Due date: ";
+      dueDate.textContent = todo.getDueDate();
+      dateDiv.appendChild(dateLabel);
+      dateDiv.appendChild(dueDate);
+
+      titleDiv.classList.add("space-between");
+      titlePara.textContent = todo.getTitle();
+      titlePara.classList.add("todo-title");
+      detailsBtn.textContent = "Expand";
+      detailsBtn.classList.add("expand-btn");
+      titleDiv.appendChild(titlePara);
+      titleDiv.appendChild(detailsBtn);
+
+      todoDiv.appendChild(dateDiv);
+      todoDiv.appendChild(titleDiv);
+
+      projectDiv.appendChild(todoDiv);
     });
 
-    main.appendChild(div);
+    main.appendChild(projectDiv);
 
   });
 

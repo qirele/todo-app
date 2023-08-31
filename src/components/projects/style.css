@@ -1,9 +1,22 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(0, 300px));
+  padding: 50px 0;
+}
+
+.grid h1 {
+  padding: 0 0 20px 0;
 }
 
 .todo-card {
+  border-bottom: 2px solid black;
+}
+
+.todo-card .todo-title {
+  font-size: 1.2rem;
+}
+
+.space-between {
   display: flex;
   justify-content: space-between;
   align-items: center;
