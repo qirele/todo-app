@@ -3,6 +3,8 @@ import createTodo from './components/todoItem';
 import createProject from './components/project';
 import createProjectsMain from './components/projects';
 import createUI from './components/ui';
+import createTodoModifyView from './components/projects/todoDivModify';
+import createTodoDiv from './components/projects/todoDiv';
 
 const projects = [];
 const proj1 = createProject("Today");
@@ -63,12 +65,31 @@ function attachListenersForTodos() {
     const todoIdx = todo.dataset.idx;
 
     const expandBtn = todo.querySelector("button");
-    expandBtn.addEventListener("click", handleExpandClick);
+    expandBtn.addEventListener("click", () => handleExpandClick(todo, todoIdx, projectIdx));
 
   });
 
-  function handleExpandClick() {
+  function handleExpandClick(todo, todoIdx, projectIdx) {
     console.log("expanding the todo")
+    const theTodoItem = projects[projectIdx].getTodos()[todoIdx];
+    const { div, collapseBtn, titleInput, descTextarea } = createTodoModifyView(theTodoItem.getTitle(), theTodoItem.getDescription());
+    while (todo.firstChild) {
+      todo.removeChild(todo.firstChild);
+    }
+    todo.appendChild(div);
+
+    collapseBtn.addEventListener("click", () => {
+      while (todo.firstChild) {
+        todo.removeChild(todo.firstChild);
+      }
+      theTodoItem.setTitle(titleInput.value);
+      theTodoItem.setDescription(descTextarea.value);
+      const newTodoDiv = createTodoDiv(theTodoItem, todoIdx, projectIdx);
+      todo.appendChild(newTodoDiv);
+      // TODO(Kiril): newTodoDiv doesn't have a "click" listener for the new expand button, so handleExpandClick doesn't do anything
+      // there might be a way to toggle the expand btn instead of creating a new button 
+    });
+
   }
 }
 

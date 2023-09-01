@@ -1,6 +1,7 @@
 import './style.css';
+import createTodoDiv from './todoDiv';
 
-export default function createProjects(projects) {
+export default function createProjectsMain(projects) {
   const main = document.createElement("main");
   main.classList.add("grid");
 
@@ -13,36 +14,7 @@ export default function createProjects(projects) {
     projectDiv.appendChild(h1);
 
     project.getTodos().forEach((todo, todoIdx) => {
-      const todoDiv = document.createElement("div");
-
-      const dateDiv = document.createElement("div");
-      const dateLabel = document.createElement("span");
-      const dueDate = document.createElement("span");
-
-      const titleDiv = document.createElement("div");
-      const titlePara = document.createElement("p");
-      const detailsBtn = document.createElement("button");
-
-      todoDiv.classList.add("todo-card");
-      todoDiv.dataset.idx = todoIdx;
-      todoDiv.dataset.projectIdx = projectIdx;
-
-      dateLabel.textContent = "Due date: ";
-      dueDate.textContent = todo.getDueDate();
-      dateDiv.appendChild(dateLabel);
-      dateDiv.appendChild(dueDate);
-
-      titleDiv.classList.add("space-between");
-      titlePara.textContent = todo.getTitle();
-      titlePara.classList.add("todo-title");
-      detailsBtn.textContent = "Expand";
-      detailsBtn.classList.add("expand-btn");
-      titleDiv.appendChild(titlePara);
-      titleDiv.appendChild(detailsBtn);
-
-      todoDiv.appendChild(dateDiv);
-      todoDiv.appendChild(titleDiv);
-
+      const {todoDiv} = createTodoDiv(todo, todoIdx, projectIdx);
       projectDiv.appendChild(todoDiv);
     });
 

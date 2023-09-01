@@ -9,7 +9,7 @@ export default function (title) {
     todos.splice(idx, 1)
   }
 
-  return { getTitle, getTodos, addTodo , deleteTodo};
+  return { getTitle, getTodos, addTodo, deleteTodo };
 }
 // const printTodos = () => {
 //   console.log(`Project: ${title}`);
