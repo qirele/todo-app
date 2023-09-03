@@ -27,7 +27,9 @@ addProjectBtn.addEventListener("click", handleAddProject)
 function handleAddTodo() {
   if (titleInput.value === "") return;
   const dateNow = new Date();
-  const date = dateInput.value === "" ? `${dateNow.getFullYear()}-${dateNow.getMonth() + 1}-${dateNow.getDate()}` : dateInput.value;
+  const monthNow = (dateNow.getMonth() + 1).toString().padStart(2, "0");
+  const dayNow = (dateNow.getDate() + 1).toString().padStart(2, "0");
+  const date = dateInput.value === "" ? `${dateNow.getFullYear()}-${monthNow}-${dayNow}` : dateInput.value;
   const item1 = createTodo(titleInput.value, "description", date);
   currentProject.addTodo(item1);
   replaceMain();
