@@ -18,6 +18,11 @@ export default function (projects) {
       projectDiv.appendChild(todoDiv);
     });
 
+    const deleteProjectBtn = document.createElement("button");
+    deleteProjectBtn.textContent = "Delete project";
+    deleteProjectBtn.classList.add("delete-project-btn");
+    projectDiv.appendChild(deleteProjectBtn);
+
     main.appendChild(projectDiv);
 
   });

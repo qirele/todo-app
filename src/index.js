@@ -28,9 +28,9 @@ function handleAddTodo() {
   if (titleInput.value === "") return;
   const dateNow = new Date();
   const monthNow = (dateNow.getMonth() + 1).toString().padStart(2, "0");
-  const dayNow = (dateNow.getDate() + 1).toString().padStart(2, "0");
-  const date = dateInput.value === "" ? `${dateNow.getFullYear()}-${monthNow}-${dayNow}` : dateInput.value;
-  const item1 = createTodo(titleInput.value, "description", date);
+  const dayNow = (dateNow.getDate()).toString().padStart(2, "0");
+  const dateStr = dateInput.value === "" ? `${dateNow.getFullYear()}-${monthNow}-${dayNow}` : dateInput.value;
+  const item1 = createTodo(titleInput.value, "description", dateStr);
   currentProject.addTodo(item1);
   replaceMain();
 }
@@ -44,6 +44,11 @@ function handleAddProject() {
 }
 
 function replaceMain() {
+  if (projects.length === 0) {
+    const proj1 = createProject("Today");
+    projects.push(proj1);
+    changeCurrentProject(0);
+  }
   const newMain = createProjectsMain(projects);
   const oldMain = document.querySelector("main");
   oldMain.remove();
@@ -61,8 +66,22 @@ function attachListenersForTodos() {
     changeCurrentProjectColor();
   }
 
+  const deleteProjectBtns = document.querySelectorAll(".delete-project-btn");
+
+  deleteProjectBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const projectToDeleteIdx = btn.parentNode.dataset.projectIdx;
+      projects.splice(projectToDeleteIdx, 1);
+      changeCurrentProject(0);
+      changeCurrentProjectColor();
+      replaceMain();
+    });
+  })
+
+
   const todos = document.querySelectorAll(".grid .todo-card");
   todos.forEach(todo => {
+
     const projectIdx = todo.dataset.projectIdx;
     const todoIdx = todo.dataset.idx;
     const expandBtn = todo.querySelector("button");
@@ -70,6 +89,8 @@ function attachListenersForTodos() {
     let isExpanded = false;
 
     expandBtn.addEventListener("click", () => {
+      changeCurrentProject(projectIdx);
+      changeCurrentProjectColor();
       const theTodoItem = projects[projectIdx].getTodos()[todoIdx];
       if (!isExpanded) {
         const { titleDiv, descDiv } = createTodoModifyContents(theTodoItem);
@@ -88,6 +109,7 @@ function attachListenersForTodos() {
       }
       isExpanded = !isExpanded;
     });
+
 
   });
 
