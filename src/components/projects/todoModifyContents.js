@@ -7,6 +7,8 @@ export default function (todo) {
   const descModifyTextarea = document.createElement("textarea");
   const descTextareaLabel = document.createElement("label");
 
+  const deleteTodoBtn = document.createElement("button");
+
   titleModifyInput.value = todo.getTitle();
   titleInputLabel.textContent = "new title:";
   titleModifyInput.classList.add("new-title-input");
@@ -19,7 +21,8 @@ export default function (todo) {
   descDiv.appendChild(descTextareaLabel);
   descDiv.appendChild(descModifyTextarea);
 
+  deleteTodoBtn.textContent = "Delete item";
 
-  return { titleDiv, descDiv, titleModifyInput, descModifyTextarea };
+  return { titleDiv, descDiv, deleteTodoBtn, titleModifyInput, descModifyTextarea };
 
 }

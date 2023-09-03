@@ -93,10 +93,16 @@ function attachListenersForTodos() {
       changeCurrentProjectColor();
       const theTodoItem = projects[projectIdx].getTodos()[todoIdx];
       if (!isExpanded) {
-        const { titleDiv, descDiv } = createTodoModifyContents(theTodoItem);
+        const { titleDiv, descDiv, deleteTodoBtn } = createTodoModifyContents(theTodoItem);
         todoContentDiv.textContent = "";
         todoContentDiv.appendChild(titleDiv);
         todoContentDiv.appendChild(descDiv);
+        todoContentDiv.appendChild(deleteTodoBtn);
+
+        deleteTodoBtn.addEventListener("click", () => {
+          projects[projectIdx].deleteTodo(todoIdx);
+          replaceMain();
+        });
       } else {
         const newTitleInput = todo.querySelector("input");
         const newDescTextarea = todo.querySelector("textarea");
