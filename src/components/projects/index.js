@@ -1,7 +1,7 @@
 import './style.css';
 import createTodoDiv from './todoDiv';
 
-export default function createProjectsMain(projects) {
+export default function (projects) {
   const main = document.createElement("main");
   main.classList.add("grid");
 

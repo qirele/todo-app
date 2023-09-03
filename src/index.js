@@ -3,8 +3,8 @@ import createTodo from './components/todoItem';
 import createProject from './components/project';
 import createProjectsMain from './components/projects';
 import createUI from './components/ui';
-import createTodoModifyView from './components/projects/todoDivModify';
-import createTodoDiv from './components/projects/todoDiv';
+import createTodoModifyContents from './components/projects/todoModifyContents';
+import createTodoContents from './components/projects/todoContents';
 
 const projects = [];
 const proj1 = createProject("Today");
@@ -51,7 +51,7 @@ function replaceMain() {
 }
 
 function attachListenersForTodos() {
-  const headings = document.querySelectorAll("main > div > h1"); // TODO(Kiril) : make this selector more specific
+  const headings = document.querySelectorAll("main > div > h1");
   headings.forEach(h => h.addEventListener("click", handleSelectClick));
 
   function handleSelectClick(e) {
@@ -63,83 +63,34 @@ function attachListenersForTodos() {
   todos.forEach(todo => {
     const projectIdx = todo.dataset.projectIdx;
     const todoIdx = todo.dataset.idx;
-
     const expandBtn = todo.querySelector("button");
-    expandBtn.addEventListener("click", () => handleExpandClick(todo, todoIdx, projectIdx));
+    const todoContentDiv = todo.querySelector(".todo-content-div");
+    let isExpanded = false;
+
+    expandBtn.addEventListener("click", () => {
+      const theTodoItem = projects[projectIdx].getTodos()[todoIdx];
+      if (!isExpanded) {
+        const { titleDiv, descDiv } = createTodoModifyContents(theTodoItem);
+        todoContentDiv.textContent = "";
+        todoContentDiv.appendChild(titleDiv);
+        todoContentDiv.appendChild(descDiv);
+      } else {
+        const newTitleInput = todo.querySelector("input");
+        const newDescTextarea = todo.querySelector("textarea");
+        theTodoItem.setTitle(newTitleInput.value);
+        theTodoItem.setDescription(newDescTextarea.value);
+        const { dateDiv, titleDiv } = createTodoContents(theTodoItem);
+        todoContentDiv.textContent = "";
+        todoContentDiv.appendChild(dateDiv);
+        todoContentDiv.appendChild(titleDiv);
+      }
+      isExpanded = !isExpanded;
+    });
 
   });
 
-  function handleExpandClick(todo, todoIdx, projectIdx) {
-    console.log("expanding the todo")
-    const theTodoItem = projects[projectIdx].getTodos()[todoIdx];
-    const { div, collapseBtn, titleInput, descTextarea } = createTodoModifyView(theTodoItem.getTitle(), theTodoItem.getDescription());
-    while (todo.firstChild) {
-      todo.removeChild(todo.firstChild);
-    }
-    todo.appendChild(div);
-
-    collapseBtn.addEventListener("click", () => {
-      while (todo.firstChild) {
-        todo.removeChild(todo.firstChild);
-      }
-      theTodoItem.setTitle(titleInput.value);
-      theTodoItem.setDescription(descTextarea.value);
-      const newTodoDiv = createTodoDiv(theTodoItem, todoIdx, projectIdx);
-      todo.appendChild(newTodoDiv);
-      // TODO(Kiril): newTodoDiv doesn't have a "click" listener for the new expand button, so handleExpandClick doesn't do anything
-      // there might be a way to toggle the expand btn instead of creating a new button 
-    });
-
-  }
 }
 
-function handleSeeDetails(e) {
-  const todoPara = e.target;
-  let todoIdx = e.target.dataset.idx;
-  let projectIdx = e.target.dataset.projectIdx;
-
-  if (projectIdx) {
-    changeCurrentProject(projectIdx);
-    changeCurrentProjectColor();
-  }
-
-
-
-  if (todoIdx) { // clicked on a todo item
-    const input = document.createElement("input");
-    const btnChange = document.createElement("button");
-    const btnDelete = document.createElement("button");
-    input.value = todoPara.textContent;
-    todoPara.textContent = "";
-    btnChange.textContent = "Change";
-    btnDelete.textContent = "Delete";
-    btnChange.addEventListener("click", (e) => handleChangeClick(e, input));
-    btnDelete.addEventListener("click", handleDeleteClick);
-    todoPara.appendChild(input);
-    todoPara.appendChild(btnChange);
-    todoPara.appendChild(btnDelete);
-    input.focus();
-  } else if (projectIdx) { // clicked on a h1, ie. project title
-    // TODO(Kiril): add an input and a button to change project title
-  } else {
-
-  }
-
-  function handleChangeClick(e, input) {
-    e.stopPropagation();
-    const theTodoItem = projects[projectIdx].getTodos()[todoIdx];
-    theTodoItem.setTitle(input.value === "" ? theTodoItem.getTitle() : input.value);
-    todoPara.textContent = theTodoItem.getTitle();
-  }
-
-  function handleDeleteClick(e) {
-    e.stopPropagation();
-    const proj = projects[projectIdx];
-    proj.deleteTodo(todoIdx);
-    replaceMain();
-  }
-
-}
 
 function changeCurrentProject(idx) {
   currentProject = projects[idx];

@@ -10,6 +10,9 @@
 
 .todo-card {
   border-bottom: 2px solid black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .todo-card .todo-title {
@@ -17,7 +20,4 @@
 }
 
 .space-between {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }

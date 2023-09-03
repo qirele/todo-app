@@ -1,33 +1,26 @@
+import createTodoContents from './todoContents';
+
 export default function (todo, todoIdx, projectIdx) {
 
   const todoDiv = document.createElement("div");
-
-  const dateDiv = document.createElement("div");
-  const dateLabel = document.createElement("span");
-  const dueDate = document.createElement("span");
-
-  const titleDiv = document.createElement("div");
-  const titlePara = document.createElement("p");
-  const expandBtn = document.createElement("button");
 
   todoDiv.classList.add("todo-card");
   todoDiv.dataset.idx = todoIdx;
   todoDiv.dataset.projectIdx = projectIdx;
 
-  dateLabel.textContent = "Due date: ";
-  dueDate.textContent = todo.getDueDate();
-  dateDiv.appendChild(dateLabel);
-  dateDiv.appendChild(dueDate);
+  const divLeft = document.createElement("div");
+  divLeft.classList.add("todo-content-div");
 
-  titleDiv.classList.add("space-between");
-  titlePara.textContent = todo.getTitle();
-  titlePara.classList.add("todo-title");
+  const { dateDiv, titleDiv } = createTodoContents(todo);
+
+  divLeft.appendChild(dateDiv);
+  divLeft.appendChild(titleDiv);
+
+  const expandBtn = document.createElement("button");
   expandBtn.textContent = "Expand";
   expandBtn.classList.add("expand-btn");
-  titleDiv.appendChild(titlePara);
-  titleDiv.appendChild(expandBtn);
 
-  todoDiv.appendChild(dateDiv);
-  todoDiv.appendChild(titleDiv);
-  return {todoDiv, expandBtn};
+  todoDiv.appendChild(divLeft);
+  todoDiv.appendChild(expandBtn);
+  return { todoDiv, expandBtn };
 }
