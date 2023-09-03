@@ -6,11 +6,27 @@ import createUI from './components/ui';
 import createTodoModifyContents from './components/projects/todoModifyContents';
 import createTodoContents from './components/projects/todoContents';
 
-const projects = [];
-const proj1 = createProject("Today");
-projects.push(proj1);
-let currentProject = proj1;
-let currentProjectIdx = 0;
+let projects, currentProjectIdx;
+if (!localStorage.getItem("projects")) {
+  // initial load default state
+  projects = [];
+  projects.push(createProject("Today"));
+  currentProjectIdx = 0;
+  projects[currentProjectIdx].addTodo(createTodo("do tomfoolery", "desc", "2023-09-04"));
+  projects[currentProjectIdx].addTodo(createTodo("create mischief", "desc", "2023-09-04"));
+  updateLocalStorage();
+} else {
+  projects = [];
+  const storedProjects = JSON.parse(localStorage.getItem("projects"));
+  storedProjects.forEach(proj => {
+    const newProject = createProject(proj.project_title);
+    proj.todos.forEach(todo => {
+      newProject.addTodo(createTodo(todo.title, todo.desc, todo.date));
+    });
+    projects.push(newProject);
+  });
+  currentProjectIdx = parseInt(localStorage.getItem("currentProjectIdx"));
+}
 
 const body = document.querySelector("body");
 const { header, titleInput, dateInput, addTodoBtn, projectTitleInput, addProjectBtn } = createUI();
@@ -24,6 +40,24 @@ addTodoBtn.addEventListener("click", handleAddTodo)
 addProjectBtn.addEventListener("click", handleAddProject)
 
 
+function updateLocalStorage() {
+  let JSONfriendlyProjects = [];
+
+  projects.forEach(proj => {
+    let obj = { "project_title": proj.getTitle() };
+    obj.todos = [];
+    proj.getTodos().forEach(todo => {
+      obj.todos.push({ "title": todo.getTitle(), "desc": todo.getDescription(), "date": todo.getDueDate() });
+    });
+
+    JSONfriendlyProjects.push(obj);
+  });
+
+  localStorage.setItem("projects", JSON.stringify(JSONfriendlyProjects));
+  localStorage.setItem("currentProjectIdx", currentProjectIdx);
+
+}
+
 function handleAddTodo() {
   if (titleInput.value === "") return;
   const dateNow = new Date();
@@ -31,8 +65,9 @@ function handleAddTodo() {
   const dayNow = (dateNow.getDate()).toString().padStart(2, "0");
   const dateStr = dateInput.value === "" ? `${dateNow.getFullYear()}-${monthNow}-${dayNow}` : dateInput.value;
   const item1 = createTodo(titleInput.value, "description", dateStr);
-  currentProject.addTodo(item1);
+  projects[currentProjectIdx].addTodo(item1);
   replaceMain();
+  updateLocalStorage();
 }
 
 function handleAddProject() {
@@ -41,6 +76,7 @@ function handleAddProject() {
   projects.push(proj);
   changeCurrentProject(projects.length - 1);
   replaceMain();
+  updateLocalStorage();
 }
 
 function replaceMain() {
@@ -55,6 +91,7 @@ function replaceMain() {
   body.appendChild(newMain);
   attachListenersForTodos();
   changeCurrentProjectColor();
+
 }
 
 function attachListenersForTodos() {
@@ -64,6 +101,7 @@ function attachListenersForTodos() {
   function handleSelectClick(e) {
     changeCurrentProject(e.target.dataset.projectIdx);
     changeCurrentProjectColor();
+    updateLocalStorage();
   }
 
   const deleteProjectBtns = document.querySelectorAll(".delete-project-btn");
@@ -75,6 +113,7 @@ function attachListenersForTodos() {
       changeCurrentProject(0);
       changeCurrentProjectColor();
       replaceMain();
+      updateLocalStorage();
     });
   })
 
@@ -114,6 +153,7 @@ function attachListenersForTodos() {
         todoContentDiv.appendChild(titleDiv);
       }
       isExpanded = !isExpanded;
+      updateLocalStorage();
     });
 
 
@@ -123,7 +163,6 @@ function attachListenersForTodos() {
 
 
 function changeCurrentProject(idx) {
-  currentProject = projects[idx];
   currentProjectIdx = idx;
 }
 
