@@ -141,6 +141,7 @@ function attachListenersForTodos() {
         deleteTodoBtn.addEventListener("click", () => {
           projects[projectIdx].deleteTodo(todoIdx);
           replaceMain();
+          updateLocalStorage();
         });
       } else {
         const newTitleInput = todo.querySelector("input");
