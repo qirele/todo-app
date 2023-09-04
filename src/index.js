@@ -12,8 +12,8 @@ if (!localStorage.getItem("projects")) {
   projects = [];
   projects.push(createProject("Today"));
   currentProjectIdx = 0;
-  projects[currentProjectIdx].addTodo(createTodo("do tomfoolery", "desc", "2023-09-04"));
-  projects[currentProjectIdx].addTodo(createTodo("create mischief", "desc", "2023-09-04"));
+  projects[currentProjectIdx].addTodo(createTodo("do tomfoolery", "desc", "2023-09-04", 0));
+  projects[currentProjectIdx].addTodo(createTodo("create mischief", "desc", "2023-09-04", 1));
   updateLocalStorage();
 } else {
   projects = [];
@@ -21,7 +21,7 @@ if (!localStorage.getItem("projects")) {
   storedProjects.forEach(proj => {
     const newProject = createProject(proj.project_title);
     proj.todos.forEach(todo => {
-      newProject.addTodo(createTodo(todo.title, todo.desc, todo.date));
+      newProject.addTodo(createTodo(todo.title, todo.desc, todo.date, todo.importance));
     });
     projects.push(newProject);
   });
@@ -29,7 +29,7 @@ if (!localStorage.getItem("projects")) {
 }
 
 const body = document.querySelector("body");
-const { header, titleInput, dateInput, addTodoBtn, projectTitleInput, addProjectBtn } = createUI();
+const { header, titleInput, dateInput, addTodoBtn, projectTitleInput, importanceSelect, addProjectBtn } = createUI();
 const main = createProjectsMain(projects);
 body.appendChild(header);
 body.appendChild(main);
@@ -47,7 +47,7 @@ function updateLocalStorage() {
     let obj = { "project_title": proj.getTitle() };
     obj.todos = [];
     proj.getTodos().forEach(todo => {
-      obj.todos.push({ "title": todo.getTitle(), "desc": todo.getDescription(), "date": todo.getDueDate() });
+      obj.todos.push({ "title": todo.getTitle(), "desc": todo.getDescription(), "date": todo.getDueDate(), "importance": todo.getImportanceIdx() });
     });
 
     JSONfriendlyProjects.push(obj);
@@ -64,7 +64,7 @@ function handleAddTodo() {
   const monthNow = (dateNow.getMonth() + 1).toString().padStart(2, "0");
   const dayNow = (dateNow.getDate()).toString().padStart(2, "0");
   const dateStr = dateInput.value === "" ? `${dateNow.getFullYear()}-${monthNow}-${dayNow}` : dateInput.value;
-  const item1 = createTodo(titleInput.value, "description", dateStr);
+  const item1 = createTodo(titleInput.value, "description", dateStr, importanceSelect.value);
   projects[currentProjectIdx].addTodo(item1);
   replaceMain();
   updateLocalStorage();
@@ -79,6 +79,7 @@ function handleAddProject() {
   updateLocalStorage();
 }
 
+// re-render main
 function replaceMain() {
   if (projects.length === 0) {
     const proj1 = createProject("Today");
@@ -132,10 +133,11 @@ function attachListenersForTodos() {
       changeCurrentProjectColor();
       const theTodoItem = projects[projectIdx].getTodos()[todoIdx];
       if (!isExpanded) {
-        const { titleDiv, descDiv, deleteTodoBtn } = createTodoModifyContents(theTodoItem);
+        const { titleDiv, descDiv, newImportanceDiv, newImportanceSelect, deleteTodoBtn } = createTodoModifyContents(theTodoItem);
         todoContentDiv.textContent = "";
         todoContentDiv.appendChild(titleDiv);
         todoContentDiv.appendChild(descDiv);
+        todoContentDiv.appendChild(newImportanceDiv);
         todoContentDiv.appendChild(deleteTodoBtn);
 
         deleteTodoBtn.addEventListener("click", () => {
@@ -146,12 +148,20 @@ function attachListenersForTodos() {
       } else {
         const newTitleInput = todo.querySelector("input");
         const newDescTextarea = todo.querySelector("textarea");
+        const newImportanceSelect = todo.querySelector("select");
         theTodoItem.setTitle(newTitleInput.value);
         theTodoItem.setDescription(newDescTextarea.value);
-        const { dateDiv, titleDiv } = createTodoContents(theTodoItem);
-        todoContentDiv.textContent = "";
-        todoContentDiv.appendChild(dateDiv);
-        todoContentDiv.appendChild(titleDiv);
+        theTodoItem.setImportanceIdx(newImportanceSelect.value);
+
+        // const { dateDiv, titleDiv } = createTodoContents(theTodoItem);
+        // todoContentDiv.textContent = "";
+        // todoContentDiv.appendChild(dateDiv);
+        // todoContentDiv.appendChild(titleDiv);
+
+        // this is temporary fix because giving div a color based on importance is happening inside of todoDiv.js, and calling createTodoContents() doesn't update the color, so we need to re-render
+        replaceMain();
+
+        updateLocalStorage();
       }
       isExpanded = !isExpanded;
       updateLocalStorage();

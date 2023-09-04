@@ -8,6 +8,20 @@ export default function (todo, todoIdx, projectIdx) {
   todoDiv.dataset.idx = todoIdx;
   todoDiv.dataset.projectIdx = projectIdx;
 
+  switch (todo.getImportance()) {
+    case "high":
+      todoDiv.classList.add("high-priority");
+      break;
+    case "medium":
+      todoDiv.classList.add("medium-priority");
+      break;
+    case "low":
+      todoDiv.classList.add("low-priority");
+      break;
+    default:
+      todoDiv.classList.add("blank-priority");
+  }
+
   const divLeft = document.createElement("div");
   divLeft.classList.add("todo-content-div");
 

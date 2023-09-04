@@ -62,9 +62,9 @@ export default function () {
 
   header.appendChild(div1);
   header.appendChild(div2);
+  header.appendChild(div4);
   header.appendChild(addTodoBtn);
   header.appendChild(div3);
-  header.appendChild(div4);
   header.appendChild(addProjectBtn);
 
   return { header, titleInput, dateInput, addTodoBtn, projectTitleInput, importanceSelect, addProjectBtn };

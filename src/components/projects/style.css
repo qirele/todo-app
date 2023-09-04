@@ -31,3 +31,15 @@
   flex-direction: column;
   justify-content: space-between;
 }
+
+.high-priority {
+  background-color: rgb(77, 0, 0);
+}
+
+.medium-priority {
+  background-color: rgb(78, 78, 0);
+}
+
+.low-priority {
+  background-color: rgb(0, 55, 31);
+}

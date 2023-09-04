@@ -7,9 +7,11 @@ export default function (title, description, dueDate, importanceIdx) { /*, dueDa
   const setDueDate = (newDate) => dueDate = newDate;
   const importance = ["high", "medium", "low"];
   const getImportance = () => importance[importanceIdx];
+  const getImportanceIdx = () => importanceIdx;
+  const setImportanceIdx = (newImportanceidx) => importanceIdx = newImportanceidx;
 
 
-  return { setTitle, getTitle, setDescription, getDescription, setDueDate, getDueDate, getImportance }
+  return { setTitle, getTitle, setDescription, getDescription, setDueDate, getDueDate, getImportance, getImportanceIdx, setImportanceIdx }
 }
 
 // const getDate = () => dueDate;

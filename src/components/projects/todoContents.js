@@ -12,10 +12,11 @@ export default function (todo) {
   dateDiv.appendChild(dateLabel);
   dateDiv.appendChild(dueDate);
 
+
   titlePara.textContent = todo.getTitle();
   titlePara.classList.add("todo-title");
   titleDiv.appendChild(titlePara);
 
-  return { dateDiv, titleDiv};
+  return { dateDiv, titleDiv };
 
 }

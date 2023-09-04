@@ -1,6 +1,8 @@
+import createNewImportanceSelect from './newImportanceSelect';
+
 export default function (todo) {
   const titleDiv = document.createElement("div");
-  const titleModifyInput= document.createElement("input");
+  const titleModifyInput = document.createElement("input");
   const titleInputLabel = document.createElement("label");
 
   const descDiv = document.createElement("div");
@@ -21,8 +23,10 @@ export default function (todo) {
   descDiv.appendChild(descTextareaLabel);
   descDiv.appendChild(descModifyTextarea);
 
+  const { newImportanceDiv, newImportanceSelect } = createNewImportanceSelect();
+
   deleteTodoBtn.textContent = "Delete item";
 
-  return { titleDiv, descDiv, deleteTodoBtn, titleModifyInput, descModifyTextarea };
+  return { titleDiv, descDiv, newImportanceDiv, deleteTodoBtn, titleModifyInput, descModifyTextarea, newImportanceSelect };
 
 }
